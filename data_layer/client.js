@@ -5,6 +5,8 @@ const DATABASE_URL =
 
 const client = new Client(DATABASE_URL);
 
+
+
 client.connect();
 
 module.exports = client;
