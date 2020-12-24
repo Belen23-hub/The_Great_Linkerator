@@ -20,4 +20,4 @@ async function getAllLinks() {
 
 client.connect()
 
-module.exports = client
+module.exports = client, getAllLinks;
