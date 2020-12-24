@@ -1,12 +1,23 @@
-const { Client } = require("pg");
+const { Client } = require('pg')
 
 const DATABASE_URL =
-  process.env.DATABASE_URL || "postgres://localhost/linkerator";
+  process.env.DATABASE_URL || 'postgres://localhost/linkerator'
 
-const client = new Client(DATABASE_URL);
+const client = new Client(DATABASE_URL)
 
+async function getAllLinks() {
+  try {
+    const allLinks = await client.query(`
+  SELECT * FROM links
+  RETURNING *;
+  
+  `)
+    return allLinks
+  } catch (error) {
+    throw error
+  }
+}
 
+client.connect()
 
-client.connect();
-
-module.exports = client;
+module.exports = client, getAllLinks;
