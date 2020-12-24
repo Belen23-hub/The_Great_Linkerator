@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:dev": "nodemon index.js & npm run build:dev",
-    "build": "react-scripts build",
-    "build:dev": "node watcher.js"
-
+    "start:dev": "npm run server:dev && npm run build:dev",
+    "server:dev": "nodemon index.js",
+    "build": "parcel src/index.html",
+    "build:dev": "parcel src/index.html"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.4",
+    "parcel": "^1.12.4",
     "pg": "^8.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
