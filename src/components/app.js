@@ -1,6 +1,7 @@
 import React from 'react'
 import Searchbar from './Searchbar'
 import Links from './Links'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
     return (

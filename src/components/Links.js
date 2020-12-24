@@ -1,12 +1,18 @@
 import React from 'react'
+import Button from 'react-bootstrap/Button';
+import DropdownButton from 'react-bootstrap/Button';
 
 const Links = () => {
     return (
         <div>
            <h3>Links</h3>
             <h3>Sort by Click Count:</h3>
+            {/* <DropdownButton id="dropdown-basic-button" title="Link/Tag">
+                <Dropdown.Item href="#/action-1">Link</Dropdown.Item>
+                <Dropdown.Item href="#/action-2">Tag</Dropdown.Item>
+            </DropdownButton> */}
             {/* <dropdown highest-lowest></dropdown> */}
-            <button>Add Link</button>
+            <Button variant="primary">Add Link</Button>{' '}
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
