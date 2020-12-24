@@ -5,8 +5,9 @@ const Searchbar = () => {
         <div>
             <h3>Enter a search term</h3>
             <input
-                type="text">
+                type="text" placeholder="Search">
             </input>
+           {/* <dropdown with link or tag></dropdown> */}
         </div>
     )
 }
