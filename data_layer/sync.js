@@ -1,11 +1,11 @@
-const client = require("./client");
+const client = require('./client')
 
 const sync = async (force = false) => {
   if (force) {
     await client.query(`
       DROP TABLE IF EXISTS links;
       DROP TABLE IF EXISTS tags;
-    `);
+    `)
   }
 
   await client.query(`
@@ -28,7 +28,7 @@ const sync = async (force = false) => {
       tag_id uuid REFERENCES tags(id),
       PRIMARY KEY(link_id, tag_id)
     );
-  `);
-};
+  `)
+}
 
-module.exports = sync;
+module.exports = sync
