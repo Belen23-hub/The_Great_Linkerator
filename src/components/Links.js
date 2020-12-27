@@ -1,18 +1,23 @@
 import React from 'react'
 import Button from 'react-bootstrap/Button';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import DropdownButton from 'react-bootstrap/Button';
+
 
 const Links = () => {
     return (
-        <div>
-           <h3>Links</h3>
-            <h3>Sort by Click Count:</h3>
-            {/* <DropdownButton id="dropdown-basic-button" title="Link/Tag">
-                <Dropdown.Item href="#/action-1">Link</Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Tag</Dropdown.Item>
-            </DropdownButton> */}
-            {/* <dropdown highest-lowest></dropdown> */}
-            <Button variant="primary">Add Link</Button>{' '}
+    <>  
+        <h3>Links</h3>  
+        <div className="links">
+            <h3 className="linkSort">Sort by Click Count:</h3>
+            <form>
+                <select className="linksDropDown">
+                    <option value="Highest" selected>Highest</option>
+                    <option value="Lowest">Lowest</option>
+                </select>
+         </form>
+            <Button className="linkButton" variant="primary">Add Link</Button>{' '}
+            </div>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
@@ -59,7 +64,7 @@ const Links = () => {
                     </div>
                 </div>   
             </div>
-        </div>
+    </>
     )
 }
 
