@@ -9,6 +9,7 @@ const {
   getLinkById,
   updateLink,
   deleteLink,
+  updateClickCount,
 } = require('../data_layer')
 
 apiRouter.get('/', (req, res, next) => {

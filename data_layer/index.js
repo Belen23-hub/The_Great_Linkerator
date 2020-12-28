@@ -79,8 +79,6 @@ async function updateLink(id, fields = {}) {
   try {
     console.log('hitting api for update')
 
-  
-
     if (setString.length > 0) {
       const result = await client.query(
         `
@@ -117,6 +115,21 @@ const deleteLink = async (id) => {
   }
 }
 
+async function updateClickCount(id) {
+  try {
+    const linkUpdated = await client.query(
+      `
+    UPDATE links
+    SET clickCount = 0 + 1
+    WHERE id=${id}; 
+    `,
+      [comment],
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
 module.exports = {
   sync,
   client,
@@ -125,4 +138,5 @@ module.exports = {
   getLinkById,
   updateLink,
   deleteLink,
+  updateClickCount,
 }
