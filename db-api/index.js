@@ -10,6 +10,11 @@ const {
   updateLink,
   deleteLink,
 } = require('../data_layer')
+
+apiRouter.get('/', (req, res, next) => {
+  res.send({ message: 'Welcome to The Great Linkerator' })
+})
+
 apiRouter.get('/links', async (req, res, next) => {
   try {
     const allLinks = await getAllLinks()
@@ -44,34 +49,37 @@ apiRouter.post('/links', async (req, res, next) => {
   }
 })
 
-apiRouter.patch('/links/:linkId', async (req, res, next) => {
-  const { linkId } = req.params
-  const { link, comment } = req.body
-  const updatedFields = {}
-
-  if (link) {
-    updatedFields.link = link
-  }
-  if (comment) {
-    updatedFields.comment = comment
-  }
-
+apiRouter.patch('/links/:linkId', async (req, res) => {
   try {
-    const originalLink = await getLinkById(linkId)
-    if (originalLink.id === linkId) {
-      console.log('this is id for udate link final', linkId)
-      const update = await updateLink(linkId, updatedFields)
-      console.log('this is updated link', update)
-      res.send({
-        message: 'Link has been updated',
-        link: update,
-      })
-    } else {
-      console.log('no id found for update')
+    const { linkId } = req.params
+    const { link, comment, clickCount } = req.body
+
+    const updateFields = {}
+    let updateTheLink = false
+
+    if (typeof comment === 'string') {
+      updatedLink = true
+      updateFields.comment = comment.trim()
     }
+    if (typeof clickCount === 'number' && clickCount >= 0) {
+      updatedLink = true
+      updateFields.clickCount = clickCount
+    }
+    if (updateLink) {
+      const updatedLink = await updateLink(linkId, updateFields)
+    }
+
+    // const originalLink = getLinkById(linkId)
+    // console.log('this is original link', originalLink)
+    // console.log('original link id', originalLink.id)
+
+    // console.log('this is for update', id)
+    // console.log('original link id', originalLink.id)
+
+    // const updatedLink = await updateLink(linkId, updateFields)
+    res.sendStatus(204)
   } catch (error) {
-    console.log('trouble updating link')
-    next(error)
+    throw error
   }
 })
 

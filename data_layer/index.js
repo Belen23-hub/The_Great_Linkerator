@@ -39,8 +39,6 @@ const createLink = async ({ link, comment }) => {
   }
 }
 
-const clickCountUpdate = async (id) => {}
-
 const getLinkById = async (id) => {
   try {
     const {
@@ -64,40 +62,38 @@ const getLinkById = async (id) => {
 }
 
 async function updateLink(id, fields = {}) {
+  console.log('this is update fields', fields)
   console.log('this is id for updateee', id)
+
   const setString = Object.keys(fields)
-    .map((key, index) => `"${key}"=$${index + 1}`)
+    .map((key, index) => `"${key}"=$${index + 2}`)
     .join(', ')
+  console.log('this is update fields after setsting', fields)
+
   console.log('this is setstring', setString)
-  if (setString.length === 0) {
-    return
-  }
+
+  // if (setString.length === 0) {
+  //   return
+  // }
 
   try {
     console.log('hitting api for update')
-    const strungQuery = await client.query(
-      `
-      UPDATE links
-      SET ${setString}
-      WHERE id=${id}
-      RETURNING *;
-      `,
-      Object.values(fields),
-    )
-    console.log(strungQuery)
-    const {
-      rows: [link],
-    } = await client.query(
-      `
-      UPDATE links
-      SET ${setString}
-      WHERE id=${id}
-      RETURNING *;
-      `,
-      Object.values(fields),
-    )
 
-    return link
+  
+
+    if (setString.length > 0) {
+      const result = await client.query(
+        `
+      UPDATE links
+      SET ${setString}
+      WHERE id=$1
+      RETURNING *;
+      `,
+        [id, ...Object.values(fields)],
+      )
+      console.log('this is the updated link thats returend', result)
+      return result
+    }
   } catch (error) {
     throw error
   }
