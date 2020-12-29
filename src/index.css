@@ -78,6 +78,10 @@ p {
     justify-content: center;
 }
 
+.searchBar:hover {
+    border: 1.5 solid #6e6e6e;
+}
+
 .searchBarInput {
     display: flex;
     padding: 0.5rem;
@@ -121,4 +125,32 @@ p {
 .linkButton {
     display: flex;
     flex-basis: 1;
+}
+
+.createNewLink {
+    display: flex;
+    flex: auto;
+    justify-content: center;
+}
+
+.searchBarLink {
+    display: flex;
+    padding: 0.5rem;
+    width: auto; 
+    border: 1.5px solid #dbdbdb;
+}
+
+.comments {
+    display:flex;
+}
+.searchBarComment {
+    display: flex;
+    padding: 0.5rem;
+    width: auto; 
+    border: 1.5px solid #dbdbdb;
+}
+
+.commentButton {
+    display: flex;
+    align-items: right;
 }

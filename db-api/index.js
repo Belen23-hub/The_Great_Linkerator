@@ -1,3 +1,4 @@
+// api index
 const express = require('express')
 const apiRouter = express.Router()
 
@@ -9,78 +10,79 @@ const {
   updateLink,
   deleteLink,
 } = require('../data_layer')
-apiRouter.get('/links', async (req, res, next) => {
-  try {
+
+apiRouter.get('/api/links', async (req, res) => {
+    try {
     const allLinks = await getAllLinks()
 
     res.send(allLinks)
-  } catch (error) {
-    next(error)
-  }
+    } catch (error) {
+    throw error
+    }
 })
 
-apiRouter.get('/links/:id', async (req, res, next) => {
-  try {
+apiRouter.get('/api/links/:id', async (req, res) => {
+    try {
     const { id } = req.params
     console.log('id is required for update', id)
 
     const linkReq = await getLinkById(id)
     console.log('link req is ', linkReq)
     res.send(linkReq)
-  } catch (error) {
-    next(error)
-  }
-})
-
-apiRouter.post('/links', async (req, res, next) => {
-  try {
-    const newLink = await createLink(req.body)
-    console.log('new link is', newLink)
-    res.send(newLink)
-  } catch (error) {
-    console.log('cant create a link')
-    next(error)
-  }
-})
-
-apiRouter.patch('/links/:linkId', async (req, res, next) => {
-  const { linkId } = req.params
-  const { link, comment } = req.body
-  const updatedFields = {}
-
-  if (link) {
-    updatedFields.link = link
-  }
-  if (comment) {
-    updatedFields.comment = comment
-  }
-
-  try {
-    const originalLink = await getLinkById(linkId)
-    if (originalLink.id === linkId) {
-      console.log('this is id for udate link final', linkId)
-      const update = await updateLink(linkId, updatedFields)
-      console.log('this is updated link', update)
-      res.send({
-        message: 'Link has been updated',
-        link: update,
-      })
-    } else {
-      console.log('no id found for update')
+    } catch (error) {
+    throw error
     }
-  } catch (error) {
-    console.log('trouble updating link')
-    next(error)
-  }
 })
 
-apiRouter.delete('/links/:id', async (req, res, next) => {
-  try {
-    const del = await deleteLink(req.params.id)
-    res.send(del)
-  } catch (error) {
-    next(error)
-  }
+apiRouter.post('/api/links', async (req, res) => {
+    console.log('hitting api')
+    console.log('this is link from req.body', req.body)
+    try {
+    // const { link, comment } = req.body
+    
+    const newLink = await createLink(req.body)
+
+    res.send({newLink})
+    } catch (error) {
+    console.log('cant create a link')
+    throw error
+    }
+})
+
+apiRouter.patch('/api/links/:linkId', async (req, res) => {
+    try {
+    const { linkId } = req.params
+    const { comment, clickCount } = req.body
+
+    const updateFields = {}
+    let updateTheLink = false
+
+    if (typeof comment === 'string') {
+        updateTheLink = true
+        updateFields.comment = comment.trim()
+    }
+    if (typeof clickCount === 'number' && clickCount >= 0) {
+        updateTheLink = true
+        updateFields.clickCount = clickCount
+    }
+
+    if (updateTheLink) {
+        const updatedLink = await updateLink(linkId, updateFields)
+    }
+
+    res.sendStatus(202)
+    } catch (error) {
+    throw error
+    }
+})
+
+apiRouter.delete('/api/links/:id', async (req, res) => {
+    try {
+        const del = await deleteLink(req.params.id)
+        res.send(del)
+    } catch (error) {
+    throw error
+    }
 })
 
 module.exports = apiRouter

@@ -1,68 +1,128 @@
-const client = require("./client");
-const sync = require("./sync");
+const sync = require('./sync')
+const client = require('./client')
 
-async function createNewLink(url, comment) {
-  try {
-    const data = await client.query(
-      `
-    INSERT INTO links(link, comment)
-    VALUES ($1, $2)
-    RETURNING *;
-`,
-      [url, comment]
-    );
-  } catch (error) {
-    throw error;
-  }
-}
+// get all links
 
-async function updateLink(id) {
+async function getAllLinks() {
   try {
-    const linkUpdated = await client.query(
-      `
-    UPDATE links
-    SET clickCount = 0 + 1
-    WHERE id=${id}; 
-    `,
-      [comment]
-    );
-  } catch (error) {
-    throw error;
-  }
-}
-
-//find the link 
-//get the data (find the date inside)
-async function foundLink(id) {
-  try {
-    const saveTheDate = await client.query(`
-    SELECT *
-    FROM links
-    WHERE id=${id}
-    RETURNING *;
+    const {
+      rows: links
+    } = await client.query(`
+      SELECT *
+      FROM links;
+    
     `)
 
-  } catch (error) {
-    throw error;
-  }
-} 
+    console.log('These are the links:', links)
 
-//should delete only the selected link
-async function deleteLink(id) {
+    return links
+  } catch (error) {
+    throw error
+  }
+}
+
+// create new link
+
+const createLink = async ({link, comment} ) => {
+  console.log('strting to create new link')
   try {
-const deletedLink = await client.query(`
-DELETE FROM links WHERE id=${id}
-`)
-  }catch (error) {
-    throw error;
+    console.log('this is link', link)
+    const {
+      rows: [newLink],
+    } = await client.query(
+      `
+      INSERT INTO links (link, comment)
+      VALUES($1, $2)
+      RETURNING *;
+    `,
+      [link, comment],
+    )
+    console.log('creating new Link', newLink)
+
+    return newLink
+  } catch (error) {
+    throw error
+  }
+}
+
+const getLinkById = async (id) => {
+  try {
+    const {
+      rows: [link],
+    } = await client.query(
+      `
+    SELECT * 
+    FROM links
+    WHERE id=$1;
+    `,
+      [id],
+    )
+    if (!link) {
+      return 'No link was found with that id'
+    }
+
+    return link
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const updateLink = async (id, fields = {}) => {
+  console.log('this is update fields', fields)
+  console.log('this is id for updateee', id)
+
+  const setString = Object.keys(fields)
+    .map((key, index) => `"${key}"=$${index + 2}`)
+    .join(', ')
+  console.log('this is update fields after setsting', fields)
+
+  console.log('this is setstring', setString)
+
+  try {
+    console.log('hitting api for update')
+
+    if (setString.length > 0) {
+      const result = await client.query(
+        `
+      UPDATE links
+      SET ${setString}
+      WHERE id=$1
+      RETURNING *;
+      `,
+        [id, ...Object.values(fields)],
+      )
+      console.log('this is the updated link thats returend', result)
+      return result
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
+const deleteLink = async (id) => {
+  console.log('delete id is', id)
+  try {
+    const {
+      rows: [delLink],
+    } = await client.query(
+      `
+    DELETE FROM links
+    WHERE id= $1;
+    `,
+      [id],
+    )
+    return 'Link is deleted '
+  } catch (error) {
+    throw error
   }
 }
 
 module.exports = {
   sync,
-  createNewLink,
+  client,
+  getAllLinks,
+  createLink,
+  getLinkById,
   updateLink,
-  foundLink,
-  deleteLink
-};
-
+  deleteLink,
+}

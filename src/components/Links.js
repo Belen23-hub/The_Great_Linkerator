@@ -1,7 +1,6 @@
 import React from 'react'
-import Button from 'react-bootstrap/Button';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DropdownButton from 'react-bootstrap/Button';
+import { DropdownButton,Button } from 'react-bootstrap';
 
 
 const Links = () => {
@@ -15,7 +14,12 @@ const Links = () => {
                     <option value="Highest" selected>Highest</option>
                     <option value="Lowest">Lowest</option>
                 </select>
-         </form>
+            </form>
+            <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                
+                {/* <a class="dropdown-item" href="#">Highest</a>
+                <a class="dropdown-item" href="#">Lowest</a> */}
+            </button>
             <Button className="linkButton" variant="primary">Add Link</Button>{' '}
             </div>
             <div className="container-fluid">
