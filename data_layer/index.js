@@ -2,11 +2,15 @@ const sync = require('./sync')
 const client = require('./client')
 
 // get all links
+
 async function getAllLinks() {
   try {
-    const { rows: links } = await client.query(`
+    const {
+      rows: links
+    } = await client.query(`
       SELECT *
-      FROM links
+      FROM links;
+    
     `)
 
     console.log('These are the links:', links)
@@ -18,9 +22,11 @@ async function getAllLinks() {
 }
 
 // create new link
-const createLink = async ({ link, comment }) => {
+
+const createLink = async ({link, comment} ) => {
   console.log('strting to create new link')
   try {
+    console.log('this is link', link)
     const {
       rows: [newLink],
     } = await client.query(
@@ -61,7 +67,7 @@ const getLinkById = async (id) => {
   }
 }
 
-async function updateLink(id, fields = {}) {
+const updateLink = async (id, fields = {}) => {
   console.log('this is update fields', fields)
   console.log('this is id for updateee', id)
 
@@ -71,10 +77,6 @@ async function updateLink(id, fields = {}) {
   console.log('this is update fields after setsting', fields)
 
   console.log('this is setstring', setString)
-
-  // if (setString.length === 0) {
-  //   return
-  // }
 
   try {
     console.log('hitting api for update')
@@ -115,21 +117,6 @@ const deleteLink = async (id) => {
   }
 }
 
-async function updateClickCount(id) {
-  try {
-    const linkUpdated = await client.query(
-      `
-    UPDATE links
-    SET clickCount = 0 + 1
-    WHERE id=${id}; 
-    `,
-      [comment],
-    )
-  } catch (error) {
-    throw error
-  }
-}
-
 module.exports = {
   sync,
   client,
@@ -138,5 +125,4 @@ module.exports = {
   getLinkById,
   updateLink,
   deleteLink,
-  updateClickCount,
 }

@@ -13,7 +13,7 @@ const sync = async (force = false) => {
 
     CREATE TABLE IF NOT EXISTS links(
       id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-      link text NOT NULL UNIQUE CONSTRAINT link_length CHECK(LENGTH(link) > 0),
+      link text NOT NULL UNIQUE CONSTRAINT link_length CHECK(LENGTH(link) > 0), 
       comment text,
       clickCount integer NOT NULL DEFAULT 1 CONSTRAINT positive_count CHECK(clickCount > 0)
     );

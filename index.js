@@ -12,17 +12,24 @@ const app = express()
 
 const morgan = require('morgan')
 
+
 app.use(morgan('dev'))
 
 app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/', apiRouter)
 
-app.use(express.static(path.join(__dirname, 'build')))
+
+
+
+
+
+app.use(express.static(path.join(__dirname, 'dist')))
 
 app.get('/', (req, res) => {
-  res.send('yeet')
+  res.sendfile(path.join(__dirname, 'dist', 'index.html'))
 })
 
-app.use('/', apiRouter)
 app.use(function (req, res, next) {
   if (res.status === '404') {
     res.status(404).send("Sorry can't find that!")
@@ -35,6 +42,8 @@ app.use(function (req, res, next) {
 
 const startServer = new Promise((resolve) => {
   app.listen(PORT, () => {
+    console.log('we are on port', PORT)
+
     resolve()
   })
 })
