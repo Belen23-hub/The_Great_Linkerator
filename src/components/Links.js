@@ -1,53 +1,40 @@
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { DropdownButton,Button } from 'react-bootstrap';
-import axios from 'axios'
+import {getLinks} from '../api/'
 
 const BASE_URL = 'api'
 const url = `${BASE_URL}/links`
 
-const linksList = [
-    {
-        url: 'www.google.com',
-        comment: 'whedhjegd',
-        clickCount: 1,
-    },
-    {
-        url: 'www.google234.com',
-        comment: 'whedhjegd',
-        clickCount: 1,
-    },
-    {
-        url: 'www.google456.com',
-        comment: 'whedhjegd',
-        clickCount: 1,
-    },
-]
+// const dummyData = [
+//     {
+//         url: 'www.google.com',
+//         comment: 'whedhjegd',
+//         clickCount: 1,
+//     },
+//     {
+//         url: 'www.google234.com',
+//         comment: 'whedhjegd',
+//         clickCount: 1,
+//     },
+//     {
+//         url: 'www.google456.com',
+//         comment: 'whedhjegd',
+//         clickCount: 1,
+//     },
+// ]
 
 const Links = () => {
-    // const [linksList, setLinksLists] = useState([]);
+    const [linksList, setLinksLists] = useState([]);
 
-//     const getLinks = async () => {
-//     const { data } = await axios.get(url)
-//     console.log('data is ', data)
-//     return data
-// }
-
-    const getLinks = async () => {
-        const response = await fetch(url);
-        const linksList = await response.json();
-        setLinksLists(linksList);
-}
-
-// useEffect(() => {
-//     setLinksLists([]);
-//     getLinks().then(setLinksLists,console.error)
-// }, [])
 
 useEffect(() => {
-    getLinks();
-}, [])
+    async function fetchData() {
+    const allLinks = await getLinks()
+    setLinksLists(allLinks)
+    }
+    fetchData();
+}, [linksList])
 
     return (
     <>  
@@ -60,18 +47,12 @@ useEffect(() => {
                     <option value="Lowest">Lowest</option>
                 </select>
             </form>
-            <button className="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                
-                {/* <a class="dropdown-item" href="#">Highest</a>
-                <a class="dropdown-item" href="#">Lowest</a> */}
-            </button>
-            <Button className="linkButton" variant="primary">Add Link</Button>{' '}
             </div>
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
                         {linksList.map((linkList, index) => {
-                            const {url, clickCount, comment, tags, created} = linkList;
+                            const {link, clickcount, comment, tags, created} = linkList;
                             return (
                                 <table className="table table-striped" key={index}>
                             <thead>
@@ -91,15 +72,21 @@ useEffect(() => {
                                     <th>
                                         Created
                                     </th>
+                                    <th>
+                                        <select className="linksDropDown">
+                                            <option value="Delete" selected>Delete</option>
+                                            <option value="Edit">Edit</option>
+                                        </select>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>
-                                        {url}
+                                        {link}
                                     </td>
                                     <td>
-                                        {clickCount}
+                                        {clickcount}
                                     </td>
                                     <td>
                                         {comment}
