@@ -1,9 +1,54 @@
-import React from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { DropdownButton,Button } from 'react-bootstrap';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from "react";
+import { DropdownButton,Button } from 'react-bootstrap';
+import axios from 'axios'
+
+const BASE_URL = 'api'
+const url = `${BASE_URL}/links`
+
+const linksList = [
+    {
+        url: 'www.google.com',
+        comment: 'whedhjegd',
+        clickCount: 1,
+    },
+    {
+        url: 'www.google234.com',
+        comment: 'whedhjegd',
+        clickCount: 1,
+    },
+    {
+        url: 'www.google456.com',
+        comment: 'whedhjegd',
+        clickCount: 1,
+    },
+]
 
 const Links = () => {
+    // const [linksList, setLinksLists] = useState([]);
+
+//     const getLinks = async () => {
+//     const { data } = await axios.get(url)
+//     console.log('data is ', data)
+//     return data
+// }
+
+    const getLinks = async () => {
+        const response = await fetch(url);
+        const linksList = await response.json();
+        setLinksLists(linksList);
+}
+
+// useEffect(() => {
+//     setLinksLists([]);
+//     getLinks().then(setLinksLists,console.error)
+// }, [])
+
+useEffect(() => {
+    getLinks();
+}, [])
+
     return (
     <>  
         <h3>Links</h3>  
@@ -25,7 +70,10 @@ const Links = () => {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
-                        <table className="table table-striped">
+                        {linksList.map((linkList, index) => {
+                            const {url, clickCount, comment, tags, created} = linkList;
+                            return (
+                                <table className="table table-striped" key={index}>
                             <thead>
                                 <tr>
                                     <th>
@@ -48,23 +96,26 @@ const Links = () => {
                             <tbody>
                                 <tr>
                                     <td>
-                                        https://linkerator-2007-lsu-pt.herokuapp.com/create
+                                        {url}
                                     </td>
                                     <td>
-                                        11
+                                        {clickCount}
                                     </td>
                                     <td>
-                                        Recursive Linkerator
+                                        {comment}
                                     </td>
                                     <td>
-                                        None
+                                        {tags}
                                     </td>
                                     <td>
-                                        12/23/2020
+                                        {created}
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                            )
+                        })}
+                        
                     </div>
                 </div>   
             </div>

@@ -1,26 +1,54 @@
-import React from 'react'
+import React , {useState, useEffect} from 'react'
+import { DropdownButton,Button } from 'react-bootstrap';
 
-
+const BASE_URL = 'api'
+const url = `${BASE_URL}/links`
 
 const Searchbar = () => {
+        const [link, setLink] = useState("");
+
+//         const createLink = async () => {
+//         const response = await fetch(url);
+//         const link = await response.json();
+//         setLink(link);
+// }
+
+// useEffect(() => {
+//     createLink();
+// }, [])
+
+        // const createLink = async (body) =>{
+
+        // const {data} = await axios.post(url, body)
+        // console.log('this is new link', data);
+
     return (
         <>
-            <div>
+                <form  onSubmit={async (event) => {
+                event.preventDefault()
+                }}>
                 <h3>Enter a search term</h3>
-            </div>
             <div className="searchBar">
                 <div className="searchBardiv">
                     <input
-                    type="text" placeholder="Search" className="searchBarInput">
+                    type="text" placeholder="Search" className="searchBarInput" 
+                    value={link}
+                    onChange={(event) => {
+                        setLink(event.target.value)
+                    }}>
                     </input>
                 </div>
-                    <form>
+                    <div>
                         <select className ="searchBarDropdown">
                             <option value = "Link" selected>Link</option>
                             <option value = "Tag">Tag</option>
                         </select>
-                    </form>
-            </div>
+                    </div>  
+                     <Button className="linkButton" variant="primary" onClick={(e)=>{
+                    {setLink(e.target.value)}}}>
+                    Add Link</Button>{' '}
+                </div>
+                </form>
         </>
     )
 }

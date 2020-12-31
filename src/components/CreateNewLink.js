@@ -1,42 +1,42 @@
-import React , {useState} from 'react'
-import {createLink} from "../api/index"
-import { Button } from 'react-bootstrap';
+// import React , {useState} from 'react'
+// import {createLink} from "../api/index"
+// import { Button } from 'react-bootstrap';
 
-function CreateNewLink() {
-    const [link, setLink] = useState("");
-    const[comment, setComment] = useState("")
+// function CreateNewLink() {
+//     const [link, setLink] = useState("");
+//     const[comment, setComment] = useState("")
 
-const submitHandler = () =>{
-    console.log('going to creatae a new link')
-    console.log('this is the function to create a link', createLink)
-    createLink({
-        link,
-        comment
-    });
-}
+// const submitHandler = () =>{
+//     console.log('going to creatae a new link')
+//     console.log('this is the function to create a link', createLink)
+//     createLink({
+//         link,
+//         comment
+//     });
+// }
 
-    return (
-        <div className="createNewLink">
+//     return (
+//         <div className="createNewLink">
 
 
-        <form onClick={(event)=>{
-            event.preventDefault();
-        }}>
+//         <form onClick={(event)=>{
+//             event.preventDefault();
+//         }}>
 
-        <h2>Link</h2>
-        <input  type="text" placeholder="Link" className="searchBarLink" value={link}  onChange={(event) => setLink(event.target.value)} />
-        <h2>Comment</h2>
-        <div className="comments">
-            <input type="text" placeholder="Comment" className="searchBarComment" value={comment} onChange={(event)=>setComment(event.target.value)} type = "text" />
-        <Button className="commentButton" onClick={()=>{
-            submitHandler()
-        }}>Submit</Button>
-        </div>
+//         <h3>Link</h3>
+//         <input  type="text" placeholder="Link" className="searchBarLink" value={link}  onChange={(event) => setLink(event.target.value)} />
+//         <h3>Comment</h3>
+//         <div className="comments">
+//             <input type="text" placeholder="Comment" className="searchBarComment" value={comment} onChange={(event)=>setComment(event.target.value)} type = "text" />
+//         <Button className="commentButton" onClick={()=>{
+//             submitHandler()
+//         }}>Submit</Button>
+//         </div>
         
-        </form>
+//         </form>
             
-        </div>
-    )
-}
+//         </div>
+//     )
+// }
 
-export default CreateNewLink
+// export default CreateNewLink
