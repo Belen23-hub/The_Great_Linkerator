@@ -36164,18 +36164,20 @@ const createLink = async body => {
 
 exports.createLink = createLink;
 
-const deleteLink = async () => {
-  const url = `${BASE_URL}/links/:id`;
+const deleteLink = async linkId => {
+  console.log('hitting delete api');
+  console.log('this is link id to delete at api', linkId);
+  const url = `${BASE_URL}/links/${linkId}`;
   const del = await _axios.default.delete(url);
-  console.log('this is del', del);
+  console.log('your link is deleted');
 };
 
 exports.deleteLink = deleteLink;
 
-const editLink = async body => {
-  const url = `${BASE_URL}/links/:id`;
+const editLink = async (body, linkId) => {
+  const url = `${BASE_URL}/links/${linkId}`;
   const edit = await _axios.default.patch(url, body);
-  console.log('this is edited link', eidt);
+  console.log('this is edited link');
 };
 
 exports.editLink = editLink;
@@ -36195,17 +36197,29 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-function CreateNewLink() {
+function CreateNewLink(props) {
+  const {
+    linkId
+  } = props;
   const [link, setLink] = (0, _react.useState)("");
   const [comment, setComment] = (0, _react.useState)("");
+  (0, _react.useEffect)(() => {
+    setLink(props.link || "");
+    setComment(props.comment || "");
+  }, [linkId]);
 
   const submitHandler = () => {
-    console.log('going to creatae a new link');
-    console.log('this is the function to create a link', _index.createLink);
     (0, _index.createLink)({
       link,
       comment
     });
+  };
+
+  const editHandler = () => {
+    (0, _index.editLink)({
+      link,
+      comment
+    }, linkId);
   };
 
   return /*#__PURE__*/_react.default.createElement("div", {
@@ -36222,7 +36236,9 @@ function CreateNewLink() {
     value: comment,
     onChange: event => setComment(event.target.value),
     type: "text"
-  }), /*#__PURE__*/_react.default.createElement("button", {
+  }), linkId ? /*#__PURE__*/_react.default.createElement("button", {
+    onClick: () => editHandler()
+  }, "Update") : /*#__PURE__*/_react.default.createElement("button", {
     onClick: () => {
       submitHandler();
     }
@@ -36257,22 +36273,9 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-const links = [{
-  url: 'www.google.com',
-  comment: 'whedhjegd',
-  clickCount: 1
-}, {
-  url: 'www.google234.com',
-  comment: 'whedhjegd',
-  clickCount: 1
-}, {
-  url: 'www.google456.com',
-  comment: 'whedhjegd',
-  clickCount: 1
-}];
-
 const App = () => {
   const [linkLists, setLinksLists] = (0, _react.useState)([]);
+  const [edit, setEdit] = (0, _react.useState)(null);
   (0, _react.useEffect)(async () => {
     setLinksLists([]);
     (0, _index.getLinks)().then(setLinksLists, console.error);
@@ -36280,12 +36283,20 @@ const App = () => {
   return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_CreateNewLink.default, null), linkLists.map((link, index) => {
     return /*#__PURE__*/_react.default.createElement("div", {
       key: index
-    }, /*#__PURE__*/_react.default.createElement("h1", null, link.link), /*#__PURE__*/_react.default.createElement("p", null, link.comment), /*#__PURE__*/_react.default.createElement("p", null, link.clickCount), /*#__PURE__*/_react.default.createElement("button", {
+    }, /*#__PURE__*/_react.default.createElement("h1", null, "URL : ", link.link), /*#__PURE__*/_react.default.createElement("p", null, "Comment : ", link.comment), /*#__PURE__*/_react.default.createElement("p", null, "ClickCoun : ", link.clickcount), edit === link.id ? /*#__PURE__*/_react.default.createElement(_CreateNewLink.default, {
+      linkId: link.id,
+      link: link.link,
+      comment: link.comment
+    }) : null, /*#__PURE__*/_react.default.createElement("button", {
       onClick: () => {
+        console.log('deleting this ', link.id);
         (0, _index.deleteLink)(link.id);
       }
     }, "delete"), /*#__PURE__*/_react.default.createElement("button", {
-      onClick: () => {}
+      onClick: () => {
+        console.log('tis id is for editing', link.id);
+        setEdit(link.id);
+      }
     }, "edit"));
   }), /*#__PURE__*/_react.default.createElement("h1", null, "The Great Linkerator"), /*#__PURE__*/_react.default.createElement("h2", null, "The ONLY solution for indexing urls 12344"), /*#__PURE__*/_react.default.createElement(_Searchbar.default, null), /*#__PURE__*/_react.default.createElement(_Links.default, null));
 };
@@ -36334,7 +36345,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51565" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61250" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

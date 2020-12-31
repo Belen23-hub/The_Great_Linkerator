@@ -1,19 +1,37 @@
-import React , {useState} from 'react'
-import {createLink} from "../api/index"
+import React , {useState, useEffect} from 'react'
+import {createLink , editLink } from "../api/index"
 
-function CreateNewLink() {
+
+function CreateNewLink(props) {
+    const {linkId} = props
     const [link, setLink] = useState("");
     const[comment, setComment] = useState("")
 
+
+    useEffect(()=>{
+        setLink(props.link || "");
+        setComment(props.comment || "");
+
+
+    }, [linkId])
+
 const submitHandler = () =>{
-    console.log('going to creatae a new link')
-    console.log('this is the function to create a link', createLink)
+   
     createLink({
         link,
         comment
     });
 
     
+
+}
+
+const editHandler = () => {
+
+    editLink({
+        link, 
+        comment
+    }, linkId)
 
 }
 
@@ -31,9 +49,10 @@ const submitHandler = () =>{
         <input value={link}  onChange={(event) => setLink(event.target.value)} type="text" />
         <h2>Comment</h2>
         <input value={comment} onChange={(event)=>setComment(event.target.value)} type = "text" />
-       <button onClick={()=>{
-         submitHandler()
-       }}>Submit</button>
+        {linkId ? <button onClick={()=>editHandler()}>Update</button> : <button onClick={()=>{
+            submitHandler()
+          }}>Submit</button>}
+       
         
         </form>
             

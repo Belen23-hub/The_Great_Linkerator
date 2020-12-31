@@ -7,26 +7,11 @@ import CreateNewLink from "./CreateNewLink"
 import {deleteLink} from "../api/index"
 import {editLink} from "../api/index"
 
-const links = [
-  {
-    url: 'www.google.com',
-    comment: 'whedhjegd',
-    clickCount: 1,
-  },
-  {
-    url: 'www.google234.com',
-    comment: 'whedhjegd',
-    clickCount: 1,
-  },
-  {
-    url: 'www.google456.com',
-    comment: 'whedhjegd',
-    clickCount: 1,
-  },
-]
+
 
 const App = () => {
   const [linkLists, setLinksLists] = useState([])
+  const [edit, setEdit ] = useState(null)
   
 
 
@@ -42,15 +27,20 @@ const App = () => {
       {linkLists.map((link, index) => {
         return (
           <div key={index}>
-            <h1>{link.link}</h1>
-            <p>{link.comment}</p>
-            <p>{link.clickCount}</p>
+            <h1>URL : {link.link}</h1>
+            <p>Comment : {link.comment}</p>
+            <p>ClickCoun : {link.clickcount}</p>
+
+            {edit === link.id? <CreateNewLink linkId={link.id} link = {link.link} comment={link.comment} /> : null}
             <button onClick = {()=>{
+              console.log('deleting this ', link.id)
 
               deleteLink(link.id)
 
             }}>delete</button>
             <button onClick = {()=>{
+              console.log('tis id is for editing', link.id)
+              setEdit(link.id)
              
 
             }}>edit</button>

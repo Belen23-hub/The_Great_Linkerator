@@ -80,7 +80,7 @@ apiRouter.patch('/api/links/:linkId', async (req, res) => {
 apiRouter.delete('/api/links/:id', async (req, res) => {
   try {
     const del = await deleteLink(req.params.id)
-    res.send(del)
+    // res.send()
   } catch (error) {
     throw error
   }

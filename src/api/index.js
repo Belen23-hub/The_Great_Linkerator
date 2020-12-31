@@ -14,15 +14,17 @@ export const createLink = async (body) =>{
   
 }
 
-export const deleteLink = async() =>{
-  const url = `${BASE_URL}/links/:id`;
+export const deleteLink = async(linkId) =>{
+  console.log('hitting delete api');
+  console.log('this is link id to delete at api', linkId)
+  const url = `${BASE_URL}/links/${linkId}`;
   const del = await axios.delete(url);
-  console.log('this is del', del)
+  console.log('your link is deleted');
 }
 
-export const editLink = async(body)=>{
-  const url = `${BASE_URL}/links/:id`;
+export const editLink = async(body, linkId)=>{
+  const url = `${BASE_URL}/links/${linkId}`;
   const edit = await axios.patch(url, body);
-  console.log('this is edited link', eidt);
+  console.log('this is edited link');
 
 }
