@@ -72,6 +72,7 @@ const getLinkById = async (id) => {
         JOIN link_tags ON tags.id=link_tags.tag_id
         WHERE link_tags.link_id=$1;
       `, [id])
+      console.log(1234345678990)
 
     link.tags = tags;
     link.dateCreated = new Date();
@@ -86,6 +87,9 @@ const getLinkById = async (id) => {
 const updateLink = async (id, fields = {}) => {
   console.log('this is update fields', fields)
   console.log('this is id for updateee', id)
+
+  const { tags } = fields // might be undefined
+  delete fields.tags
 
   const setString = Object.keys(fields)
     .map((key, index) => `"${key}"=$${index + 2}`)
@@ -108,39 +112,32 @@ const updateLink = async (id, fields = {}) => {
         [id, ...Object.values(fields)],
       )
       console.log('this is the updated link thats returend', result)
-      return result
+      
     }
+    if (tags === undefined) {
+      return await getLinkById(id)
+    }
+
+    // make any new tags that need to be made
+    const tagList = await createTags(tags)
+    const tagListIdString = tagList.map((tag) => `${tag.id}`).join(', ')
+
+    console.log('tag list string', tagListIdString)
+
+    console.log('addtagtolink is done')
+   
+    await addTagsToLink(id, tagList)
+
+   
+
+
+
+    return await  getLinkById(id)
   } catch (error) {
     throw error
   }
 }
 
-
-
-// async function updateLink(id, fields = {}) {
-   
-//   const setString = Object.keys(fields).map(
-//     (key, index) => `"${ key }"=$${ index + 1 }`
-//   ).join(', ');
-
-  
-//   if (setString.length === 0) {
-//     return;
-//   }
-
-//   try {
-//     const { rows: [ link ] }= await client.query(`
-//       UPDATE links
-//       SET ${ setString }
-//       WHERE id=${ id }
-//       RETURNING *;
-//     `, Object.values(fields));
-
-//     return link;
-//   } catch (error) {
-//     throw error;
-//   }
-// }
 
 
 
@@ -197,8 +194,12 @@ const createTags = async (tagList) =>{
   const insertValues = tagList.map(
     (_, index) => `$${index + 1}`).join('), (');
 
+    console.log('these are inserted values', insertValues)
+
   const selectValues = tagList.map(
     (_, index) => `$${index + 1}`).join(', ');
+
+    console.log('this is select values', selectValues)
 
   try {
     await client.query(`
@@ -207,11 +208,14 @@ const createTags = async (tagList) =>{
       ON CONFLICT (tag) DO NOTHING;
     `, tagList);
 
+    console.log('helllo')
+
     const { rows } = await client.query(`
       SELECT * FROM tags
       WHERE tag
       IN (${selectValues});
     `, tagList)
+    console.log('tag rows ', rows)
     return rows;
   } catch (error) {
     throw error;

@@ -102,7 +102,7 @@ apiRouter.get('/api/tags', async (req, res, next) => {
       }
 
       if (tags && tags.length > 0) {
-        updateFields.tags = tags.trim().split(/\s+/);
+        updateFields.tags = tags;
       }
   
       if (updateTheLink) {
