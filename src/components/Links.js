@@ -2,12 +2,15 @@ import React, {useState} from 'react'
 import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import DropdownButton from 'react-bootstrap/Button'
+import CreateNewLink from './CreateNewLink'
 
 const Links = () => {
+  const [addLink, setAddLink] = useState(false);
   
   return (
     <>
       <h3>Links</h3>
+ 
       <div className="links">
         <h3 className="linkSort">Sort by Click Count:</h3>
         <form>
@@ -18,7 +21,7 @@ const Links = () => {
             <option value="Lowest">Lowest</option>
           </select>
         </form>
-        <Button className="linkButton" variant="primary">
+        <Button  className="linkButton" variant="primary">
           Add Link
         </Button>
       </div>

@@ -6,6 +6,7 @@ import { getLinks } from '../api/index'
 import CreateNewLink from "./CreateNewLink"
 import {deleteLink} from "../api/index"
 import {editLink} from "../api/index"
+import { getAllTags } from '../../data_layer'
 
 
 
@@ -30,6 +31,10 @@ const App = () => {
             <h1>URL : {link.link}</h1>
             <p>Comment : {link.comment}</p>
             <p>ClickCoun : {link.clickcount}</p>
+              <p>tags: {link.tags.map((tag)=>{
+                return <h1>{tag.tag}</h1>
+              })
+                }</p>
 
             {edit === link.id? <CreateNewLink linkId={link.id} link = {link.link} comment={link.comment} /> : null}
             <button onClick = {()=>{

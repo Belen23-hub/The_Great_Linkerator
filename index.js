@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const apiRouter = require('./db-api')
 const bodyParser = require('body-parser')
+require('dotenv').config()
 
 const { sync } = require('./data_layer/index')
 
@@ -11,17 +12,17 @@ const FORCE = process.env.FORCE || false
 const app = express()
 
 const morgan = require('morgan')
-
-
 app.use(morgan('dev'))
 
-app.use(bodyParser.json())
-// app.use(bodyParser.urlencoded({ extended: false }));
+
+
+
+
+app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }))
+
+
 app.use('/', apiRouter)
-
-
-
-
 
 
 app.use(express.static(path.join(__dirname, 'dist')))

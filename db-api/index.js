@@ -9,18 +9,22 @@ const {
   getLinkById,
   updateLink,
   deleteLink,
+  getAllTags,
+  getLinkByTagName,
+
 } = require('../data_layer')
 
 apiRouter.get('/api/links', async (req, res) => {
-  try {
-    const allLinks = await getAllLinks()
-
+  try{
+    const allLinks = await getAllLinks();
     res.send(allLinks)
-  } catch (error) {
+
+  } catch(error){
     throw error
   }
+  
 })
-
+// get link by id route
 apiRouter.get('/api/links/:id', async (req, res) => {
   try {
     const { id } = req.params
@@ -50,37 +54,72 @@ apiRouter.post('/api/links', async (req, res) => {
   }
 })
 
-apiRouter.patch('/api/links/:linkId', async (req, res) => {
+
+apiRouter.get('/api/tags', async (req, res, next) => {
   try {
-    const { linkId } = req.params
-    const { comment, clickCount } = req.body
-
-    const updateFields = {}
-    let updateTheLink = false
-
-    if (typeof comment === 'string') {
-      updateTheLink = true
-      updateFields.comment = comment.trim()
-    }
-    if (typeof clickCount === 'number' && clickCount >= 0) {
-      updateTheLink = true
-      updateFields.clickCount = clickCount
-    }
-
-    if (updateTheLink) {
-      const updatedLink = await updateLink(linkId, updateFields)
-    }
-
-    res.sendStatus(202)
-  } catch (error) {
-    throw error
+    const tags = await getAllTags();
+  
+    res.send({
+      "tags": tags
+    });
+    next();
+  } catch(error) {
+    console.log("Error requesting tags");
+    next(error);
   }
-})
+});
+
+  apiRouter.get('/api/tags/:tagName/links', async (req, res, next) => {
+    const { tagName } = req.params
+    try {
+      console.log("Requesting link by tag name");
+      const links = getLinkByTagName(tagName);
+
+      res.send({ links });
+    } catch(error) {
+      console.log("Error requesting link by tag name");
+      next(error);
+    }
+  })
+
+  apiRouter.patch('/api/links/:linkId', async (req, res) => {
+    console.log('this is req body',req.body)
+    console.log('this is id ', req.params.linkId)
+    try {
+      const { linkId } = req.params
+      const { comment, clickCount, tags } = req.body
+  
+      const updateFields = {}
+      let updateTheLink = false
+  
+      if (typeof comment === 'string') {
+        updateTheLink = true
+        updateFields.comment = comment.trim()
+      }
+      if (typeof clickCount === 'number' && clickCount >= 0) {
+        updateTheLink = true
+        updateFields.clickCount = clickCount
+      }
+
+      if (tags && tags.length > 0) {
+        updateFields.tags = tags.trim().split(/\s+/);
+      }
+  
+      if (updateTheLink) {
+        const updatedLink = await updateLink(linkId, updateFields)
+        console.log(updatedLink)
+      }
+  
+      res.sendStatus(202)
+    } catch (error) {
+      throw error
+    }
+  })
 
 apiRouter.delete('/api/links/:id', async (req, res) => {
   try {
     const del = await deleteLink(req.params.id)
-    // res.send()
+    res.send("link is deleted")
   } catch (error) {
     throw error
   }
