@@ -11,12 +11,9 @@ const FORCE = process.env.FORCE || false
 
 const app = express()
 
+ front+backend
 const morgan = require('morgan')
 app.use(morgan('dev'))
-
-
-
-
 
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }))
@@ -39,6 +36,8 @@ app.use(function (req, res, next) {
   }
 
   next()
+
+
 })
 
 const startServer = new Promise((resolve) => {

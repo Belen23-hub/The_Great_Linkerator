@@ -1,4 +1,5 @@
 {
+front+backend
 	"name": "linkerator",
 	"version": "1.0.0",
 	"description": "",
@@ -45,4 +46,5 @@
 			"last 1 safari version"
 		]
 	}
+
 }

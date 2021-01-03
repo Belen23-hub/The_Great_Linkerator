@@ -1,3 +1,4 @@
+ front+backend
 const sync = require('./sync')
 const client = require('./client')
 
@@ -127,9 +128,6 @@ const updateLink = async (id, fields = {}) => {
     console.log('addtagtolink is done')
    
     await addTagsToLink(id, tagList)
-
-   
-
 
 
     return await  getLinkById(id)
@@ -291,6 +289,7 @@ const getLinkByTagName = async (tagName) =>{
 
 module.exports = {
   sync,
+ front+backend
   client,
   getAllLinks,
   createLink,
@@ -304,3 +303,4 @@ module.exports = {
   getAllTags
   
 }
+
