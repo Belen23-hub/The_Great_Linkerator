@@ -1,28 +1,37 @@
-import React , {useState, useEffect} from 'react'
-import {createLink , editLink } from "../api/index"
+import React from "react";
+import {
+  Checkbox,
+  TextField,
+  Button,
+  TextareaAutosize,
+  Container,
+} from "@material-ui/core";
+import { useEffect, useState } from "react";
+import {createLink, editLink}  from "../api/index";
 
 
-function CreateNewLink(props) {
+
+
+
+
+
+function CreateNewLink  (props) {
     const {linkId} = props
-    const [link, setLink] = useState("");
-    const[comment, setComment] = useState("")
+  const [link, setLink] = useState("");
+  const [comment, setComment] = useState("");
+  const [tag, setTag] = useState("");
+  useEffect(() => {
+    setLink(props.link || "");
+    setComment(props.comment || "");
+    setTag(props.tag || "");
+  }, [linkId]);
 
-
-    useEffect(()=>{
-        setLink(props.link || "");
-        setComment(props.comment || "");
-
-
-    }, [linkId])
-
-const submitHandler = () =>{
-   
+  const submitHandler = () =>{
     createLink({
         link,
-        comment
+        comment,
+        tag
     });
-
-    
 
 }
 
@@ -35,29 +44,56 @@ const editHandler = () => {
 
 }
 
-    return (
-        <div className="createNewLink">
+   
 
 
-        <form onClick={(event)=>{
-            event.preventDefault();
-           
-        }}>
 
+  
 
-        <h2>Link</h2>
-        <input value={link}  onChange={(event) => setLink(event.target.value)} type="text" />
-        <h2>Comment</h2>
-        <input value={comment} onChange={(event)=>setComment(event.target.value)} type = "text" />
+  return (
+    <div>
+      <form
+        className="createLinkForm"
+        onSubmit={async (event) => {
+          event.preventDefault();
+          
+        
+        }}
+      >
+        <label>URL</label>
+        <TextField
+          type="text"
+          value={link}
+          placeholder="Link here"
+          onChange={(event) => {
+            setLink(event.target.value);
+          }}
+        />
+        <label>Comment</label>
+        <TextField
+          type="text"
+          value={comment}
+          placeholder="Comment here"
+          onChange={(event) => {
+            setComment(event.target.value);
+          }}
+        />
+          <label>Tags</label>
+        <TextField
+          type="text"
+          value={tag}
+          placeholder="Comment here"
+          onChange={(event) => {
+            setTag(event.target.value);
+          }}
+        />
+        <div>
         {linkId ? <button onClick={()=>editHandler()}>Update</button> : <button onClick={()=>{
             submitHandler()
           }}>Submit</button>}
-       
-        
-        </form>
-            
         </div>
-    )
-}
-
-export default CreateNewLink
+      </form>
+    </div>
+  );
+};
+export default CreateNewLink;
