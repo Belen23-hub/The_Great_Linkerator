@@ -7,26 +7,29 @@ const url = `${BASE_URL}/links`
 
 const Searchbar = () => {
     const [link, setLink] = useState("");
-    const[comment, setComment] = useState("")
+    const[comment, setComment] = useState("");
+    const [isDirty, setIsDirty] = useState(false)
 
 
     const submitHandler = () =>{
-    console.log('going to creatae a new link')
-    console.log('this is the function to create a link', createLink)
+
     createLink({
         link,
         comment
     });
 }
 
-
-
-
-
     return (
         <>
                 <form  onSubmit={async (event) => {
                 event.preventDefault()
+
+                setIsDirty(true)
+
+                if ({link} === {link})
+                setIsDirty(true)
+                return
+
                 }}>
                 <h3>Enter a search term</h3>
             <div className="searchBar">
@@ -37,6 +40,9 @@ const Searchbar = () => {
                     onChange={(event) => {
                         setLink(event.target.value)
                     }}>
+                        {isDirty && {link} === {link} ? (
+                            <h4 style={{ color: red}}>Link already exists</h4>
+                        ) : null}
                     </input>
                 </div>
                 <div className="searchBardiv">
