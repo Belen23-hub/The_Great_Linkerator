@@ -5,19 +5,6 @@ const DATABASE_URL =
 
 const client = new Client(DATABASE_URL)
 
-async function getAllLinks() {
-  try {
-    const allLinks = await client.query(`
-  SELECT * FROM links
-  RETURNING *;
-  
-  `)
-    return allLinks
-  } catch (error) {
-    throw error
-  }
-}
-
 client.connect()
 
 module.exports = client, getAllLinks;
