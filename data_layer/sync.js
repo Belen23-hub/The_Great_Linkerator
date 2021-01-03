@@ -1,11 +1,11 @@
-const client = require("./client");
+const client = require('./client')
 
 const sync = async (force = false) => {
   if (force) {
     await client.query(`
       DROP TABLE IF EXISTS links;
       DROP TABLE IF EXISTS tags;
-    `);
+    `)
   }
 
   await client.query(`
@@ -13,7 +13,7 @@ const sync = async (force = false) => {
 
     CREATE TABLE IF NOT EXISTS links(
       id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-      link text NOT NULL UNIQUE CONSTRAINT link_length CHECK(LENGTH(link) > 0),
+      link text NOT NULL UNIQUE CONSTRAINT link_length CHECK(LENGTH(link) > 0), 
       comment text,
       clickCount integer NOT NULL DEFAULT 1 CONSTRAINT positive_count CHECK(clickCount > 0)
     );
@@ -28,7 +28,7 @@ const sync = async (force = false) => {
       tag_id uuid REFERENCES tags(id),
       PRIMARY KEY(link_id, tag_id)
     );
-  `);
-};
+  `)
+}
 
-module.exports = sync;
+module.exports = sync
